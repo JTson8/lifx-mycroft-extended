@@ -114,16 +114,45 @@ class LifxSkillExtended(MycroftSkill):
         else:
             assert False, "Triggered toggle intent without On/Off keyword."
 
-        for k, v in self.targets.items():
-            v.set_power(power_status, duration=self.transition_time_ms)
+        if not message.data.get("_TestRunner"):
+            for k, v in self.targets.items():
+                v.set_power(power_status, duration=self.transition_time_ms)
 
         self.speak_dialog(status_str)
+
+    @intent_handler(IntentBuilder("").require("Turn").require("All").require("Color")
+                    .optionally("_TestRunner").build())
+    def handle_color_all_intent(self, message):
+        color_str = message.data["Color"]
+        rgb = webcolors.name_to_rgb(color_str)
+        hsbk = lifxlan.utils.RGBtoHSBK(rgb)
+
+        if not message.data.get("_TestRunner"):
+            for k, v in self.targets.items():
+                v.set_color(hsbk, duration=self.transition_time_ms)
+
+        self.speak_dialog("Turning all lights to " + color_str)
+
+    @intent_handler(IntentBuilder("").require("Turn").require("All").require("On").require("Color")
+                    .optionally("_TestRunner").build())
+    def handle_color_and_toggle_all_intent(self, message):
+        power_status = True
+        color_str = message.data["Color"]
+        rgb = webcolors.name_to_rgb(color_str)
+        hsbk = lifxlan.utils.RGBtoHSBK(rgb)
+
+        if not message.data.get("_TestRunner"):
+            for k, v in self.targets.items():
+                v.set_power(power_status, duration=self.transition_time_ms)
+                v.set_color(hsbk, duration=self.transition_time_ms)
+
+        self.speak_dialog("Turning all lights on and to " + color_str)
 
     @intent_handler(IntentBuilder("").require("Turn").require("Target").require("On").require("Color")
                     .optionally("_TestRunner").build())
     def handle_color_and_toggle_intent(self, message):
-        power_status = False
-        status_str = "Off"
+        power_status = True
+        status_str = "On"
 
         color_str = message.data["Color"]
         rgb = webcolors.name_to_rgb(color_str)
@@ -136,8 +165,8 @@ class LifxSkillExtended(MycroftSkill):
                                              'status_str': status_str})
 
         if not message.data.get("_TestRunner"):
-            target.set_color(hsbk, duration=self.transition_time_ms)
             target.set_power(power_status, duration=self.transition_time_ms)
+            target.set_color(hsbk, duration=self.transition_time_ms)
 
         self.set_context("Target", name)
 
