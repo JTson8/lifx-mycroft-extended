@@ -162,7 +162,7 @@ class LifxSkillExtended(MycroftSkill):
 
         self.speak_dialog('SwitchAndColor', {'name': name,
                                              'color': color_str,
-                                             'status_str': status_str})
+                                             'status': status_str})
 
         if not message.data.get("_TestRunner"):
             target.set_power(power_status, duration=self.transition_time_ms)
