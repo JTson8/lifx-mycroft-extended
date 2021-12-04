@@ -89,15 +89,16 @@ class LifxSkillExtended(MycroftSkill):
 
     @intent_handler(IntentBuilder("GoodNightLightsIntent").require("GoodNightAllKeyword"))
     def handle_turn_off_all_intent(self, message):
-        for target in self.targets:
-            target.set_power(False, duration=self.transition_time_ms)
+
+        for k, v in self.targets:
+            v.set_power(False, duration=self.transition_time_ms)
 
         self.speak_dialog("All lights turned off good night")
 
     @intent_handler(IntentBuilder("GoodMorningLightsIntent").require("GoodMorningAllKeyword"))
     def handle_turn_on_all_intent(self, message):
-        for target in self.targets:
-            target.set_power(True, duration=self.transition_time_ms)
+        for k, v in self.targets:
+            v.set_power(True, duration=self.transition_time_ms)
 
         self.speak_dialog("All lights turned on good morning")
 
@@ -113,8 +114,8 @@ class LifxSkillExtended(MycroftSkill):
         else:
             assert False, "Triggered toggle intent without On/Off keyword."
 
-        for target in self.targets:
-            target.set_power(power_status, duration=self.transition_time_ms)
+        for k, v in self.targets:
+            v.set_power(power_status, duration=self.transition_time_ms)
 
         self.speak_dialog(status_str)
 
