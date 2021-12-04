@@ -1,0 +1,12 @@
+{
+  "utterance": "turn up the bedroom light kelvin",
+  "remove_context": ["Target"],
+  "intent_type": "handle_temperature_intent",
+  "intent": {
+    "Temperature": "kelvin",
+    "Target": "Bedroom",
+    "Increase": "up"
+  },
+  "expected_dialog": "Temperature",
+  "set_context": {"_TestRunner": "data", "test": ""}
+}

@@ -1,0 +1,13 @@
+{
+  "utterance": "set the bedroom light saturation to 50%",
+  "remove_context": ["Target"],
+  "intent_type": "handle_percent_intent",
+  "intent": {
+    "Turn": "set",
+    "Target": "Bedroom",
+    "Saturation": "saturation",
+    "Percent": "50%"
+  },
+  "expected_dialog": "SetPercent",
+  "set_context": {"_TestRunner": "data", "test": ""}
+}

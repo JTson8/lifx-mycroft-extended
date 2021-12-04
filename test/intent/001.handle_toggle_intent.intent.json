@@ -1,0 +1,12 @@
+{
+  "utterance": "turn off bedroom light",
+  "remove_context": ["Target"],
+  "intent_type": "handle_toggle_intent",
+  "intent": {
+    "Turn": "turn",
+    "Off": "off",
+    "Target": "Bedroom"
+  },
+  "expected_dialog": "Switch",
+  "set_context": {"_TestRunner": "data", "test": ""}
+}

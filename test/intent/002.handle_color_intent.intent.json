@@ -1,0 +1,12 @@
+{
+  "utterance": "turn the bedroom light red",
+  "remove_context": ["Target"],
+  "intent_type": "handle_color_intent",
+  "intent": {
+    "Turn": "turn",
+    "Color": "red",
+    "Target": "Bedroom"
+  },
+  "expected_dialog": "Color",
+  "set_context": {"_TestRunner": "data", "test": ""}
+}

@@ -1,0 +1,29 @@
+{
+  "name": "lifx-mycroft-extended",
+  "skillMetadata": {
+    "sections": [
+      {
+        "name": "Increment Percentage",
+        "fields": [
+          {
+            "name": "percent_step",
+            "type": "number",
+            "label": "Percent (%)",
+            "value": ".25"
+          }
+        ]
+      },
+      {
+        "name": "Transition Time (ms)",
+        "fields": [
+          {
+            "name": "transition_time",
+            "type": "number",
+            "label": "Time (milliseconds)",
+            "value": "1250"
+          }
+        ]
+      }
+    ]
+  }
+}
