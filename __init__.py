@@ -93,14 +93,14 @@ class LifxSkillExtended(MycroftSkill):
         for k, v in self.targets.items():
             v.set_power(False, duration=self.transition_time_ms)
 
-        self.speak_dialog("All lights turned off good night")
+        self.speak_dialog("All lights turned off, good night")
 
     @intent_handler(IntentBuilder("GoodMorningLightsIntent").require("GoodMorningAllKeyword"))
     def handle_turn_on_all_intent(self, message):
         for k, v in self.targets.items():
             v.set_power(True, duration=self.transition_time_ms)
 
-        self.speak_dialog("All lights turned on good morning")
+        self.speak_dialog("All lights turned on, good morning")
 
     @intent_handler(IntentBuilder("").require("Turn").require("All").one_of("Off", "On")
                     .optionally("_TestRunner").build())
