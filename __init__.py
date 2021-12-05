@@ -89,36 +89,61 @@ class LifxSkillExtended(MycroftSkill):
 
     @intent_handler(IntentBuilder("GoodNightLightsIntent").require("GoodNightAllKeyword"))
     def handle_turn_off_all_intent(self, message):
+        error_list = []
 
         for k, v in self.targets.items():
-            v.set_power(False, duration=self.transition_time_ms)
+            try:
+                v.set_power(False, duration=self.transition_time_ms)
+            except Exception:
+                error_list.append(k)
 
-        self.speak_dialog("All lights turned off, good night")
+        except_msg = ""
+        if len(error_list) != 0:
+            except_msg = "Except for " + ', '.join(error_list)
+
+        self.speak_dialog("All lights turned off" + except_msg + ", good night")
 
     @intent_handler(IntentBuilder("GoodMorningLightsIntent").require("GoodMorningAllKeyword"))
     def handle_turn_on_all_intent(self, message):
-        for k, v in self.targets.items():
-            v.set_power(True, duration=self.transition_time_ms)
+        error_list = []
 
-        self.speak_dialog("All lights turned on, good morning")
+        for k, v in self.targets.items():
+            try:
+                v.set_power(True, duration=self.transition_time_ms)
+            except Exception:
+                error_list.append(k)
+
+        except_msg = ""
+        if len(error_list) != 0:
+            except_msg = "Except for " + ', '.join(error_list)
+
+        self.speak_dialog("All lights turned on" + except_msg + ", good morning")
 
     @intent_handler(IntentBuilder("").require("Turn").require("All").one_of("Off", "On")
                     .optionally("_TestRunner").build())
     def handle_toggle_all_intent(self, message):
         if "Off" in message.data:
             power_status = False
-            status_str = "Turning off all lights"
+            status_str = "Turning off all lights."
         elif "On" in message.data:
             power_status = True
-            status_str = "Turning on all lights"
+            status_str = "Turning on all lights."
         else:
             assert False, "Triggered toggle intent without On/Off keyword."
 
+        error_list = []
         if not message.data.get("_TestRunner"):
             for k, v in self.targets.items():
-                v.set_power(power_status, duration=self.transition_time_ms)
+                try:
+                    v.set_power(power_status, duration=self.transition_time_ms)
+                except Exception:
+                    error_list.append(k)
 
-        self.speak_dialog(status_str)
+        except_msg = ""
+        if len(error_list) != 0:
+            except_msg = "Except for " + ', '.join(error_list)
+
+        self.speak_dialog(status_str + except_msg)
 
     @intent_handler(IntentBuilder("").require("Turn").require("All").require("Color")
                     .optionally("_TestRunner").build())
@@ -127,11 +152,19 @@ class LifxSkillExtended(MycroftSkill):
         rgb = webcolors.name_to_rgb(color_str)
         hsbk = lifxlan.utils.RGBtoHSBK(rgb)
 
+        error_list = []
         if not message.data.get("_TestRunner"):
             for k, v in self.targets.items():
-                v.set_color(hsbk, duration=self.transition_time_ms)
+                try:
+                    v.set_color(hsbk, duration=self.transition_time_ms)
+                except Exception:
+                    error_list.append(k)
 
-        self.speak_dialog("Turning all lights to " + color_str)
+        except_msg = ""
+        if len(error_list) != 0:
+            except_msg = "Except for " + ', '.join(error_list)
+
+        self.speak_dialog("Turning all lights to " + color_str + except_msg)
 
     @intent_handler(IntentBuilder("").require("Turn").require("All").require("On").require("Color")
                     .optionally("_TestRunner").build())
@@ -141,12 +174,19 @@ class LifxSkillExtended(MycroftSkill):
         rgb = webcolors.name_to_rgb(color_str)
         hsbk = lifxlan.utils.RGBtoHSBK(rgb)
 
+        error_list = []
         if not message.data.get("_TestRunner"):
             for k, v in self.targets.items():
-                v.set_power(power_status, duration=self.transition_time_ms)
-                v.set_color(hsbk, duration=self.transition_time_ms)
+                try:
+                    v.set_power(power_status, duration=self.transition_time_ms)
+                    v.set_color(hsbk, duration=self.transition_time_ms)
+                except Exception:
+                    error_list.append(k)
+        except_msg = ""
+        if len(error_list) != 0:
+            except_msg = "Except for " + ', '.join(error_list)
 
-        self.speak_dialog("Turning all lights on and to " + color_str)
+        self.speak_dialog("Turning all lights on and to " + color_str + except_msg)
 
     @intent_handler(IntentBuilder("").require("Turn").require("Target").require("On").require("Color")
                     .optionally("_TestRunner").build())
